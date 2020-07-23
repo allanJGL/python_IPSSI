@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Code Share: Share your codes!</title>
+</head>
+<body>
+    <h1>Last modifications</h1>
+    {% if last_added %}
+        <h2>Dernières modifs</h2>
+        {% for modifs in last_modifs %}
+            <p>
+                {{ modifs[id] }} - <a href="/view/{{ modifs[" uid"] }}">{{ modifs["uid"] }}</a>
+            </p>
+            <p>
+            <pre>{{ modifs["code"] }}</pre>
+            </p>
+            <p>
+            <pre>{{ modifs["ip"] }}</pre>
+            </p>
+            <p>
+            <pre>{{ modifs["user_agent"] }}</pre>
+            </p>
+            <p>
+            <pre>{{ modifs["date"] }}</pre>
+            </p>
+
+            <hr/>
+        {% endfor %}
+    {% endif %}
+
+    <form method="GET" action="/">
+        <button name="home">Home</button>
+    </form>
+</body>
+</html>

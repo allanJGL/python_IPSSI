@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+from datetime import datetime
 
 from flask import Flask, request, render_template, \
-    redirect
+    redirect, jsonify
 
 from model_sqlite import save_info, \
     read_code, \
     read_lang, \
     edit_info, \
-    get_last_entries_from_files
+    get_last_entries_from_files, \
+    save_user_info, get_last_modifs
 
 app = Flask(__name__)
 
@@ -42,6 +44,11 @@ def publish():
     uid = request.form['uid']
     lang = request.form['lang']
     edit_info(uid, code, lang)
+    ip = request.remote_addr
+    user_agent = str(request.user_agent)
+    date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print(str(user_agent))
+    save_user_info(ip, user_agent, date, uid)
     return redirect("{}{}/{}".format(request.host_url,
                                      request.form['submit'],
                                      uid))
@@ -62,7 +69,8 @@ def view(uid):
 
 @app.route('/admin/')
 def admin():
-    pass
+    d = {'last_modifs': get_last_modifs()}
+    return render_template('admin.html', **d)
 
 
 if __name__ == '__main__':
