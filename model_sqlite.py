@@ -90,7 +90,6 @@ def get_last_modifs():
         modifs = curs.fetchall()
         d = []
         for i, e in enumerate(modifs):
-            print(e)
             if i >= 10:
                 break
             d.append({'ip': e[1], 'user_agent': e[2], 'date': e[3], 'uid': e[4], 'code': e[5]})

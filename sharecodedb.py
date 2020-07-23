@@ -47,7 +47,6 @@ def publish():
     ip = request.remote_addr
     user_agent = str(request.user_agent)
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(str(user_agent))
     save_user_info(ip, user_agent, date, uid)
     return redirect("{}{}/{}".format(request.host_url,
                                      request.form['submit'],
