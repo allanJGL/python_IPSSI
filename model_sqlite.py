@@ -4,7 +4,6 @@ from string import ascii_letters, digits
 from itertools import chain
 from random import choice
 import sqlite3
-import os
 
 
 def create_uid(n=9):
@@ -23,14 +22,13 @@ def save_info(uid=None, code=None, lang=None):
 
     with sqlite3.connect('sharecode.sqlite3') as conn:
         curs = conn.cursor()
-
-    if uid is None:
-        uid = create_uid()
-        code = '# Write your code here...'
-        lang = ''
-    curs.execute("INSERT INTO info(uid, code, lang) VALUES(?, ?, ?)", (uid, code, lang))
-    conn.commit()
-    return uid
+        if uid is None:
+            uid = create_uid()
+            code = '# Write your code here...'
+            lang = ''
+        curs.execute("INSERT INTO info(uid, code, lang) VALUES(?, ?, ?)", (uid, code, lang))
+        conn.commit()
+        return uid
 
 
 def edit_info(uid=None, code=None, lang=None):
@@ -99,9 +97,6 @@ def get_last_modifs():
 def get_last_entries_from_files(n=10, nlines=10):
     with sqlite3.connect('sharecode.sqlite3') as conn:
         curs = conn.cursor()
-        curs.execute("CREATE TABLE IF NOT EXISTS info (uid text not null primary key, code text, lang text)")
-        curs.execute(
-            "CREATE TABLE IF NOT EXISTS user_info (id integer not null primary key autoincrement, ip_adr text, user_agent text, date_modif datetime, uid text)")
         curs.execute("SELECT * from info")
         entries = curs.fetchall()
         d = []
@@ -110,3 +105,13 @@ def get_last_entries_from_files(n=10, nlines=10):
                 break
             d.append({'uid': e[0], 'code': e[1], 'lang': e[2]})
         return d
+
+
+def init_sql():
+    '''créé les tables si elles n'existent pas '''
+    with sqlite3.connect('sharecode.sqlite3') as conn:
+        curs = conn.cursor()
+        curs.execute("CREATE TABLE IF NOT EXISTS info (uid text not null primary key, code text, lang text)")
+        curs.execute(
+            "CREATE TABLE IF NOT EXISTS user_info (id integer not null primary key autoincrement, ip_adr text, user_agent text, date_modif datetime, uid text)")
+        return curs

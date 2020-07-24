@@ -9,7 +9,7 @@ from model_sqlite import save_info, \
     read_lang, \
     edit_info, \
     get_last_entries_from_files, \
-    save_user_info, get_last_modifs
+    save_user_info, get_last_modifs, init_sql
 
 app = Flask(__name__)
 
@@ -73,4 +73,5 @@ def admin():
 
 
 if __name__ == '__main__':
+    init_sql()
     app.run()
