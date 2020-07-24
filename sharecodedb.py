@@ -11,6 +11,10 @@ from model_sqlite import save_info, \
     get_last_entries_from_files, \
     save_user_info, get_last_modifs, init_sql
 
+from pygments import highlight
+from pygments.lexers import PythonLexer, get_lexer_by_name
+from pygments.formatters import HtmlFormatter
+
 app = Flask(__name__)
 
 
@@ -61,6 +65,7 @@ def view(uid):
         return render_template('error.html', uid=uid)
     if lang is None:
         lang = ''
+    code = highlight(code, get_lexer_by_name(lang, stripall=True), HtmlFormatter(linenos=True))
     d = dict(uid=uid, code=code, lang=lang,
              url="{}view/{}".format(request.host_url, uid))
     return render_template('view.html', **d)
